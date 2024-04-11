@@ -1,24 +1,53 @@
 import Head from 'next/head'
 import Header from '@components/Header'
-import Footer from '@components/Footer'
+import axios from 'axios'
 
 export default function Home() {
   return (
     <div className="container">
       <Head>
-        <title>Next.js Starter!</title>
+        <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <Header title="Welcome to my app!" />
+        <Header title="Login page" />
         <p className="description">
-          Test
-          Get started by editing <code>pages/index.js</code>
+          <button onClick={handleSubmit}>Login</button>
         </p>
       </main>
-
-      <Footer />
     </div>
   )
+}
+
+const handleSubmit = async (e) => {
+  e.preventDefault()
+
+  try {
+    const scope = 'openid';
+    const responseType = 'code';
+    const redirect_uri= 'https://chuanyong.netlify.app';
+    const nonce = '54481a5c-ce01-4247-888c-9a2f1c02394a';
+    const state = '5eCKEUXKNEKDx';
+    const client_id = 'zPjmFOm3bDPiGFIHezfWlY4DOFym5aMc';
+    const singpassURL = `https://stg-id.singpass.gov.sg/auth?scope=${scope}&response_type=${responseType}&redirect_uri=${redirect_uri}&nonce=${nonce}&client_id=${client_id}&state=${state}`;
+
+    axios.get(singpassURL).then(response => {
+      console.log(response.data);
+    })
+    // const res = await fetch('http://localhost:3000/api/singpasslogin',{
+    //   method: 'GET',
+    //   headers: {
+    //     'content-type': 'application/json'
+    //   }
+    // })
+    // console.log(res)
+    // if(res.ok){
+    //   console.log("Yea!")
+    // }else{
+    //   console.log("Oops! Something is wrong.")
+    // }
+  } catch (error) {
+      console.log(error)
+  }
 }
