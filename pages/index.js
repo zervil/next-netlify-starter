@@ -32,9 +32,10 @@ const handleSubmit = async (e) => {
     const client_id = 'zPjmFOm3bDPiGFIHezfWlY4DOFym5aMc';
     const singpassURL = `https://stg-id.singpass.gov.sg/auth?scope=${scope}&response_type=${responseType}&redirect_uri=${redirect_uri}&nonce=${nonce}&client_id=${client_id}&state=${state}`;
 
-    axios.get(singpassURL).then(response => {
-      console.log(response.data);
-    })
+    window.location.href = singpassURL;
+    // axios.get(singpassURL).then(response => {
+    //   console.log(response.data);
+    // })
     // const res = await fetch('http://localhost:3000/api/singpasslogin',{
     //   method: 'GET',
     //   headers: {
