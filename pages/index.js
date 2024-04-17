@@ -26,7 +26,7 @@ const handleSubmit = async (e) => {
   try {
     const scope = 'openid';
     const responseType = 'code';
-    const redirect_uri= 'https://chuanyong.netlify.app';
+    const redirect_uri= 'https://chuanyong.netlify.app/dashboard';
     const nonce = '54481a5c-ce01-4247-888c-9a2f1c02394a';
     const state = '5eCKEUXKNEKDx';
     const client_id = 'zPjmFOm3bDPiGFIHezfWlY4DOFym5aMc';
