@@ -51,7 +51,7 @@ const handleSubmit = async (e) => {
       aud: "https://id.singpass.gov.sg",
       jti: 'saff3wr32rfwasff54yerdhg45gfe4',
       exp: Math.floor(Date.now() / 1000) + 300,
-      iat: Date.getTime(),
+      iat: new Date.getTime(),
       code: codeReturn
     };
     
