@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Header from '@components/Header'
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
 
 export default function Home() {
   return (
@@ -30,22 +31,60 @@ const handleSubmit = async (e) => {
     console.log('code: ', codeReturn);
     console.log('state: ', stateReturn);
     const scope = 'openid';
-    const responseType = 'code';
-    const redirect_uri= 'https://chuanyong.netlify.app';
-    const nonce = '54481a5c-ce01-4247-888c-9a2f1c02394a';
-    const state = '5eCKEUXKNEKDx';
+    const redirect_uri= 'https://chuanyong.netlify.app/dashboard';
     const client_id = 'zPjmFOm3bDPiGFIHezfWlY4DOFym5aMc';
-    const singpassURL = `https://stg-id.singpass.gov.sg/auth?scope=${scope}&response_type=${responseType}&redirect_uri=${redirect_uri}&nonce=${nonce}&client_id=${client_id}&state=${state}`;
+    const grantType = 'authorization_code';
+    const clientAssertionType = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+
+    const privatekey = `-----BEGIN EC PRIVATE KEY-----
+    MHcCAQEEICXoLhGdD6jzX5ePTY9O9YBgv0ZZ6oBWDRsjKaeASXp6oAoGCCqGSM49
+    AwEHoUQDQgAELCnuRSU9Vf+bx65i3Vbibj123RQFrIEaXuMuXunzPXGURKge07fy
+    FoiMucdGZ2MZGsm37JdlnVGd5yU1h4D4Rg==
+    -----END EC PRIVATE KEY-----`
+    const header = {
+      typ: 'JWT',
+      alg: 'ES256'
+    };
+    const payload = {
+      iss: client_id,
+      sub: client_id,
+      aud: "https://id.singpass.gov.sg",
+      jti: uuid(),
+      exp: Math.floor(Date.now() / 1000) + 300,
+      iat: Date.getTime(),
+      code: codeReturn
+    };
+    
+    const token = jwt.sign(payload, privatekey, { header: header, algorithm: "ES256" });
+    console.log(token);
+
+    const clientAssertion = token;
+    const singpassTokenURL = `https://stg-id.singpass.gov.sg/token`;
 
     // window.location.href = singpassURL;
-    // axios.get(singpassURL).then(response => {
-    //   console.log(response.data);
-    // })
+    axios.post(singpassTokenURL,{
+      scope: scope,
+      redirect_uri: redirect_uri,
+      client_id: client_id,
+      grant_type: grantType,
+      code: codeReturn,
+      client_assertion_type: clientAssertionType,
+      client_assertion: clientAssertion,
+    }).then(response => {
+      console.log(response.data);
+    })
     // const res = await fetch('http://localhost:3000/api/singpasslogin',{
-    //   method: 'GET',
+    //   method: 'POST',
     //   headers: {
     //     'content-type': 'application/json'
-    //   }
+    //   },
+    //   scope: scope,
+    //   redirect_uri: redirect_uri,
+    //   client_id: client_id,
+    //   grant_type: grantType,
+    //   code: codeReturn,
+    //   client_assertion_type: clientAssertionType,
+    //   client_assertion: clientAssertion,
     // })
     // console.log(res)
     // if(res.ok){
