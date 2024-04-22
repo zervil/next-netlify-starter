@@ -49,7 +49,7 @@ const handleSubmit = async (e) => {
       iss: client_id,
       sub: client_id,
       aud: "https://id.singpass.gov.sg",
-      jti: uuid(),
+      jti: 'saff3wr32rfwasff54yerdhg45gfe4',
       exp: Math.floor(Date.now() / 1000) + 300,
       iat: Date.getTime(),
       code: codeReturn
