@@ -24,9 +24,11 @@ const handleSubmit = async (e) => {
   e.preventDefault()
 
   try {
-    const urlParams = new URLSearchParams(window.location);
-    console.log("urlParams: ", urlParams);
-    console.log("window location:", window.location);
+    const params = new URL(location.href).searchParams;
+    const codeReturn = params.get('code');
+    const stateReturn = params.get('state');
+    console.log('code: ', codeReturn);
+    console.log('state: ', stateReturn);
     const scope = 'openid';
     const responseType = 'code';
     const redirect_uri= 'https://chuanyong.netlify.app';
